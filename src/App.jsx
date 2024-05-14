@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Menu } from 'antd';
+import { Menu, Spin } from 'antd';
 import axios from 'axios';
 import CryptocurrencyCard from './components/CryptocurrencyCard';
 
@@ -10,7 +10,8 @@ function getItem(title, key, children, type) {
 
 const App = () => {
   const [currencies, setCurrencies] = useState([]);
-  const [currencies_id, setCurrencies_id] = useState(1);
+  const [currencyId, setCurrencyId] = useState(1);
+  const [currencyData, setCurrencyData] = useState(null);
 
   const fetchCurrencies = () => {
     axios.get("http://127.0.0.1:8000/cryptocurrencies")
@@ -36,17 +37,28 @@ const App = () => {
       });
   };
 
+  const fetchCurrency = () => {
+    axios.get(`http://127.0.0.1:8000/cryptocurrencies/${currencyId}`)
+      .then(response => {
+        setCurrencyData(response.data)
 
-      
+      })
+    }
 
 
   useEffect(() => {
     fetchCurrencies();
   }, []);
 
+  
+  useEffect(() => {
+    setCurrencyData(null)
+    fetchCurrency();
+  }, [currencyId]);
+
+
   const onClick = (e) => {
-    console.log('click ', e);
-    setCurrencies_id(e.key)
+    setCurrencyId(e.key)
   };
 
   return (
@@ -63,7 +75,8 @@ const App = () => {
           className='h-screen overflow-scroll'
         />
         <div className='mx-auto my-auto'> 
-          <CryptocurrencyCard />
+        { currencyData ? <CryptocurrencyCard currency = {currencyData}/> : <Spin size='large'/>}
+          
         </div>
         
         </div>

@@ -1,6 +1,7 @@
 
 import { Card, Col, Row } from 'antd';
-function CryptocurrencyCard() {
+function CryptocurrencyCard(props) {
+    const {currency} = props
 
     return (
       <>
@@ -9,11 +10,11 @@ function CryptocurrencyCard() {
       <Card title={
         <div>
             
-        <img src = 'https://s2.coinmarketcap.com/static/img/coins/64x64/1.png'/>
-        <span className='flex'>Bitcoin</span>
+        <img src = {`https://s2.coinmarketcap.com/static/img/coins/64x64/${currency.id}.png`}/>
+        <span className='flex'>{currency.name}</span>
         </div>
       }  bordered={false}>
-        Lorem ipsum dolor, sit amet consectetur adipisicing elit
+        <b>Ціна: {currency.quote.USD.price} $</b> 
       </Card>
     </Col>
   </Row>
